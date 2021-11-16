@@ -27,3 +27,7 @@
 /DATA/work_space/webPageInterview/serverAPI/obj/Debug/net5.0/ref/serverAPI.dll
 /DATA/work_space/webPageInterview/serverAPI/obj/Debug/net5.0/serverAPI.pdb
 /DATA/work_space/webPageInterview/serverAPI/obj/Debug/net5.0/serverAPI.genruntimeconfig.cache
+/DATA/work_space/webPageInterview/serverAPI/bin/Debug/net5.0/Microsoft.AspNetCore.JsonPatch.dll
+/DATA/work_space/webPageInterview/serverAPI/bin/Debug/net5.0/Microsoft.AspNetCore.Mvc.NewtonsoftJson.dll
+/DATA/work_space/webPageInterview/serverAPI/bin/Debug/net5.0/Newtonsoft.Json.dll
+/DATA/work_space/webPageInterview/serverAPI/bin/Debug/net5.0/Newtonsoft.Json.Bson.dll
