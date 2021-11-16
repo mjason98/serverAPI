@@ -38,7 +38,7 @@ namespace serverAPI
                 options.SerializerSettings.ReferenceLoopHandling=Newtonsoft.Json.ReferenceLoopHandling.Ignore)
                 .AddNewtonsoftJson(options => options.SerializerSettings.ContractResolver = new DefaultContractResolver());
             
-            services.AddSingleton<ILessonRepository, LessonRepository>();
+            services.AddSingleton<ILessonRepository, LessonRepositoryBD>();
             
             services.AddControllers();
             services.AddSwaggerGen(c =>

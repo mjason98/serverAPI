@@ -31,3 +31,9 @@
 /DATA/work_space/webPageInterview/serverAPI/bin/Debug/net5.0/Microsoft.AspNetCore.Mvc.NewtonsoftJson.dll
 /DATA/work_space/webPageInterview/serverAPI/bin/Debug/net5.0/Newtonsoft.Json.dll
 /DATA/work_space/webPageInterview/serverAPI/bin/Debug/net5.0/Newtonsoft.Json.Bson.dll
+/DATA/work_space/webPageInterview/serverAPI/bin/Debug/net5.0/System.Data.SqlClient.dll
+/DATA/work_space/webPageInterview/serverAPI/bin/Debug/net5.0/runtimes/win-arm64/native/sni.dll
+/DATA/work_space/webPageInterview/serverAPI/bin/Debug/net5.0/runtimes/win-x64/native/sni.dll
+/DATA/work_space/webPageInterview/serverAPI/bin/Debug/net5.0/runtimes/win-x86/native/sni.dll
+/DATA/work_space/webPageInterview/serverAPI/bin/Debug/net5.0/runtimes/unix/lib/netcoreapp2.1/System.Data.SqlClient.dll
+/DATA/work_space/webPageInterview/serverAPI/bin/Debug/net5.0/runtimes/win/lib/netcoreapp2.1/System.Data.SqlClient.dll

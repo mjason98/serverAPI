@@ -1,5 +1,6 @@
 using serverAPI.Entities;
 using serverAPI.Dtos;
+using System;
 
 namespace serverAPI{
     public static class Extensions{
@@ -12,6 +13,9 @@ namespace serverAPI{
                 dateFin = lesson.dateFin,
                 description = lesson.description
             };
+        }
+        public static string asStringDB(this DateTimeOffset date){
+            return date.Year.ToString()+'-' + date.Month.ToString()+'-'+date.Day.ToString()+' '+date.Hour+':'+date.Minute+':'+date.Second;
         }
     }
 }

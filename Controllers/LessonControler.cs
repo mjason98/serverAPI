@@ -58,7 +58,8 @@ namespace serverAPI.Controllers {
             var updatedLesson = lesson with {
                 name = lessonDto.name,
                 prophesor = lessonDto.prophesor,
-                //date = lessonDto.date,
+                dateIni = lessonDto.dateIni,
+                dateFin = lessonDto.dateFin,
                 description = lessonDto.description
             };
 
