@@ -5,9 +5,10 @@ namespace serverAPI.Dtos {
     public record UpdateLessonDto{
         //[Required]
         //public Guid id {get; init;}
-        public string name {get; init;}
-        public string prophesor{get; init;}
-        //public DateTimeOffset date {get; init;}
+        public int name {get; init;}
+        public int prophesor{get; init;}
+        public DateTimeOffset dateIni {get; init;}
+        public DateTimeOffset dateFin {get; init;}
         public string description {get; init;}
     }
 }

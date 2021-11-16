@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using serverAPI.Repositories;
 using serverAPI.Dtos;
-using System;
+//using System;
 using serverAPI.Entities;
+using Microsoft.Extensions.Configuration;
 
 namespace serverAPI.Controllers {
     
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/[controller]")] //revisar lo de api
     public class LessonController : ControllerBase {
         private ILessonRepository repository;
 
@@ -24,7 +25,7 @@ namespace serverAPI.Controllers {
         }
 
         [HttpGet("{id}")]
-        public ActionResult<LessonDto> GetLesson(Guid id){
+        public ActionResult<LessonDto> GetLesson(int id){
             var lesson = repository.GetLesson(id);
 
             if (lesson is null)
@@ -36,10 +37,11 @@ namespace serverAPI.Controllers {
         [HttpPost]
         public ActionResult<LessonDto> CreateLesson(CreateLessonDto lessonDto){
             Lesson lesson = new (){
-                id = Guid.NewGuid(),
+                id = 10, //esto esta re mal
                 name = lessonDto.name,
                 prophesor = lessonDto.prophesor,
-                date = lessonDto.date,
+                dateIni = lessonDto.dateIni,
+                dateFin = lessonDto.dateFin,
                 description = lessonDto.description,
             };
 
@@ -49,7 +51,7 @@ namespace serverAPI.Controllers {
         }
 
         [HttpPut("{id}")]
-        public ActionResult UpdateLesson(Guid id, UpdateLessonDto lessonDto){
+        public ActionResult UpdateLesson(int id, UpdateLessonDto lessonDto){
             var lesson = repository.GetLesson(id);
             if (lesson is null) 
                 return NotFound();
@@ -65,7 +67,7 @@ namespace serverAPI.Controllers {
         }
 
         [HttpDelete("{id}")]
-        public ActionResult DeleteLesson(Guid id){
+        public ActionResult DeleteLesson(int id){
             var existingLesson = repository.GetLesson(id);
             
             if (existingLesson is null)

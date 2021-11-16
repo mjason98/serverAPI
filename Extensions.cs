@@ -8,7 +8,8 @@ namespace serverAPI{
                 name = lesson.name,
                 id = lesson.id,
                 prophesor = lesson.prophesor,
-                date = lesson.date,
+                dateIni = lesson.dateIni,
+                dateFin = lesson.dateFin,
                 description = lesson.description
             };
         }
