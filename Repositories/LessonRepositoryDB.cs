@@ -21,11 +21,14 @@ namespace serverAPI.Repositories{
             string pwdR = configuration.GetConnectionString("Password"); 
             string user = configuration.GetConnectionString("User");
             
-            //a very bad practice, seek other wey in the future
+            //a very bad practice, seek other way in the future ------------------
+            // The variable pwdR mos be removed, couse the idea of habing Sequirity strings its to not habe the passwrd
+            // value in memory, and pwdR does.
             SecureString pwd = new SecureString();
             foreach(var c in pwdR){
                 pwd.AppendChar(c);
             }
+            //--------------------------------------------------------------------
             pwd.MakeReadOnly();
 
             return new SqlCredential(user, pwd);
@@ -88,6 +91,9 @@ namespace serverAPI.Repositories{
             var table  = processSQLQuery(query);
             var lessonRow = table.Select().SingleOrDefault();
             
+            if (lessonRow is null)
+                return null;
+
             Lesson lesson = new (){
                 id = Convert.ToInt32(lessonRow["id"]),
                 name = Convert.ToInt32(lessonRow["name"]),
