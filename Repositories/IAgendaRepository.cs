@@ -10,6 +10,11 @@ namespace serverAPI.Repositories {
         Task UpdateLessonAsync(Lesson _lesson);
         Task DeleteLessonAsync(int _id);
 
+        /* Tuple<day number, number of lessons that day> */
+        Task<IEnumerable<System.Tuple<int,int>>> GetDailyLessonsAsync(int month, int year);
+
+        Task<IEnumerable<Lesson>> GetLessonsByDateAsync(int day, int month, int year);
+
         Task<IEnumerable<Profesor>> GetProfesorsAsync();
         Task<Profesor> GetProfesorAsync(int _id);
         Task CreateProfesorAsync(Profesor _lesson);

@@ -29,5 +29,12 @@ namespace serverAPI{
                 id = topic.id
             };
         }
+
+        public static DaysDto asDaysDto(this Tuple<int, int> tup){
+            return new DaysDto {
+                day = tup.Item1,
+                n = tup.Item2,
+            };
+        }
     }
 }

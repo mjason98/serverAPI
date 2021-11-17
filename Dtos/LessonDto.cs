@@ -1,4 +1,5 @@
 using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace serverAPI.Dtos {
     public record LessonDto{
@@ -8,5 +9,12 @@ namespace serverAPI.Dtos {
         public DateTimeOffset dateIni {get; init;}
         public DateTimeOffset dateFin {get; init;}
         public string description {get; init;}
+    }
+
+    public record MonthYearDto{
+        [Required]
+        public int month {get; init;}
+        [Required]
+        public int year {get; init;}
     }
 }

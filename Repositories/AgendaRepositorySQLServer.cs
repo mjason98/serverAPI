@@ -143,6 +143,35 @@ namespace serverAPI.Repositories{
             await processSQLQueryNotAnswer(query);
         }
 
+        public async Task<IEnumerable<Tuple<int, int>>> GetDailyLessonsAsync(int month, int year)
+        {
+            string query = @"SELECT t1.day as day, COUNT(*) as n FROM ( SELECT DAY(dateIni) as day FROM Lessons
+                             WHERE YEAR(dateIni) = "+year.ToString()+@" and MONTH(dateIni) = "+month.ToString()+@" ) as t1 GROUP BY t1.day";
+            var table = await processSQLQuery(query);
+            var days = table.Select().Select(row => new Tuple<int,int>(Convert.ToInt32(row["day"]), Convert.ToInt32(row["n"])));
+            return days;
+        }
+
+        public async Task<IEnumerable<Lesson>> GetLessonsByDateAsync(int day, int month, int year)
+        {
+            string query = @"select id, name, prophesor, dateIni, dateFin, descr
+                                   from dbo.Lessons where day(dateIni) = "+day.ToString()+@" and year(dateIni) = "+year.ToString()+@" and month(dateIni) = "+month.ToString();
+            var table = await processSQLQuery(query);
+            
+            var lessons = table.Select().Select(row => 
+                new Lesson{
+                    id = Convert.ToInt32(row["id"]),
+                    name = Convert.ToInt32(row["name"]),
+                    prophesor =  Convert.ToInt32(row["prophesor"]),
+                    description = row["descr"].ToString(),
+                    dateIni = DateTimeOffset.Parse(row["dateIni"].ToString()),
+                    dateFin = DateTimeOffset.Parse(row["dateFin"].ToString())
+                }
+            );
+
+            return lessons;
+        }
+
         #endregion
 
         #region ProfesorMethods
