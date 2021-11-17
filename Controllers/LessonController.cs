@@ -6,14 +6,17 @@ using serverAPI.Entities;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 
+
+///// HAY ERROR EN EL CREATE CON EL ID
+
 namespace serverAPI.Controllers {
     
     [ApiController]
-    [Route("api/[controller]")] //revisar lo de api
+    [Route("api/[controller]")]
     public class LessonController : ControllerBase {
-        private ILessonRepository repository;
+        private IAgendaRepository repository;
 
-        public LessonController (ILessonRepository _repo){
+        public LessonController (IAgendaRepository _repo){
             this.repository = _repo;
         }
 
@@ -36,7 +39,6 @@ namespace serverAPI.Controllers {
         [HttpPost]
         public async Task<ActionResult<LessonDto>> CreateLessonAsync(CreateLessonDto lessonDto){
             Lesson lesson = new (){
-                id = 10, //esto esta re mal
                 name = lessonDto.name,
                 prophesor = lessonDto.prophesor,
                 dateIni = lessonDto.dateIni,
@@ -46,7 +48,7 @@ namespace serverAPI.Controllers {
 
             await repository.CreateLessonAsync(lesson);
 
-            return CreatedAtAction(nameof(GetLessonAsync), new {id = lesson.id}, lesson.asDto());
+            return CreatedAtAction(nameof(GetLessonAsync), new {id = 0}, lesson.asDto());
         }
 
         [HttpPut("{id}")]

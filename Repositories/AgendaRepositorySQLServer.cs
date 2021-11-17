@@ -10,11 +10,13 @@ using System.Threading.Tasks;
 
 namespace serverAPI.Repositories{
     
-    public class LessonRepositoryBD : ILessonRepository
+    public class AgendaRepositorySQLServer : IAgendaRepository
     {
         private readonly IConfiguration configuration;
         
-        public LessonRepositoryBD(IConfiguration _configuration){
+        #region InitMethods
+        
+        public AgendaRepositorySQLServer(IConfiguration _configuration){
             this.configuration = _configuration;
         }
 
@@ -69,7 +71,11 @@ namespace serverAPI.Repositories{
                 await myCon.CloseAsync();
             }
         }
+
+        #endregion
         
+        #region LessonMethods
+
         public async Task CreateLessonAsync(Lesson _lesson)
         { 
             string dateIni = _lesson.dateIni.asStringDB();
@@ -136,5 +142,110 @@ namespace serverAPI.Repositories{
                              id = "+_lesson.id.ToString();
             await processSQLQueryNotAnswer(query);
         }
+
+        #endregion
+
+        #region ProfesorMethods
+
+        public async Task<IEnumerable<Profesor>> GetProfesorsAsync()
+        {
+            const string query = @"select id, name from dbo.Claustro";
+            var table = await processSQLQuery(query);
+            
+            var profesors = table.Select().Select(row => 
+                new Profesor{
+                    id = Convert.ToInt32(row["id"]),
+                    name = row["name"].ToString()
+                }
+            );
+            return profesors;
+        }
+
+        public async Task<Profesor> GetProfesorAsync(int _id)
+        {
+            string query = @"select id, name from dbo.Claustro where id = " + _id.ToString();
+            var table  = await processSQLQuery(query);
+            var vRow =  table.Select().SingleOrDefault();
+            
+            if (vRow is null)
+                return null;
+
+            Profesor prof = new (){
+                id = Convert.ToInt32(vRow["id"]),
+                name = vRow["name"].ToString()
+            };
+            return prof;
+        }
+
+        public async Task CreateProfesorAsync(Profesor prof)
+        {
+            string query   = @"insert into dbo.Claustro (name) values ('" + prof.name + @"')";
+            await processSQLQueryNotAnswer(query);
+        }
+
+        public async Task UpdateProfesorAsync(Profesor prof)
+        {
+            string query   = @"update dbo.Claustro set name='" + prof.name + @"' where id = " + prof.id.ToString();
+            await processSQLQueryNotAnswer(query);
+        }
+
+        public async Task DeleteProfesorAsync(int _id)
+        {
+            string query = @"delete from dbo.Claustro where id = "+_id.ToString();
+            await processSQLQueryNotAnswer(query);
+        }
+
+        #endregion
+
+        #region TopicMethods
+        public async Task<IEnumerable<Topic>> GetTopicsAsync()
+        {
+            const string query = @"select id, name from dbo.Topics";
+            var table = await processSQLQuery(query);
+            
+            var topics = table.Select().Select(row => 
+                new Topic{
+                    id = Convert.ToInt32(row["id"]),
+                    name = row["name"].ToString()
+                }
+            );
+            return topics;
+        }
+
+        public async Task<Topic> GetTopicAsync(int _id)
+        {
+            string query = @"select id, name from dbo.Topics where id = " + _id.ToString();
+            var table  = await processSQLQuery(query);
+            var vRow =  table.Select().SingleOrDefault();
+            
+            if (vRow is null)
+                return null;
+
+            Topic topic = new (){
+                id = Convert.ToInt32(vRow["id"]),
+                name = vRow["name"].ToString()
+            };
+            return topic;
+        }
+
+        public async Task CreateTopicAsync(Topic topic)
+        {
+            string query   = @"insert into dbo.Topics (name) values ('" + topic.name + @"')";
+            await processSQLQueryNotAnswer(query);
+        }
+
+        public async Task UpdateTopicAsync(Topic topic)
+        {
+            string query   = @"update dbo.Topics set name='" + topic.name + @"' where id = " + topic.id.ToString();
+            await processSQLQueryNotAnswer(query);
+        }
+
+        public async Task DeleteTopicAsync(int _id)
+        {
+            string query = @"delete from dbo.Topics where id = "+_id.ToString();
+            await processSQLQueryNotAnswer(query);
+        }
+
+        #endregion
     }
 }
