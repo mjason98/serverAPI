@@ -40,7 +40,10 @@ namespace serverAPI
             
             services.AddSingleton<ILessonRepository, LessonRepositoryBD>();
             
-            services.AddControllers();
+            // thisis for async error
+            services.AddControllers(options => {
+                options.SuppressAsyncSuffixInActionNames = false;
+            });
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "serverAPI", Version = "v1" });

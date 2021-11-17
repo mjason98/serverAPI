@@ -6,6 +6,7 @@ using System.Data;
 using System.Linq;
 using System.Security;
 using System;
+using System.Threading.Tasks;
 
 namespace serverAPI.Repositories{
     
@@ -34,7 +35,7 @@ namespace serverAPI.Repositories{
             return new SqlCredential(user, pwd);
         }
 
-        private DataTable processSQLQuery(string query){
+        private async Task<DataTable> processSQLQuery(string query){
             DataTable table = new DataTable();
             string sqlDataSource = configuration.GetConnectionString("serverAPICon");
             SqlDataReader myReader;
@@ -42,54 +43,54 @@ namespace serverAPI.Repositories{
                 SqlCredential cred = CreateMyCredentials();
                 myCon.Credential = cred;
                 
-                myCon.Open();
+                await myCon.OpenAsync();
                 using (SqlCommand myCommand = new SqlCommand(query, myCon)){
-                    myReader = myCommand.ExecuteReader();
+                    myReader = await myCommand.ExecuteReaderAsync();
                     table.Load(myReader);
                     myReader.Close();
                 }
-                myCon.Close();
+                await myCon.CloseAsync();
             }
             return table;
         }
 
-        private void processSQLQueryNotAnswer(string query){
+        private async Task processSQLQueryNotAnswer(string query){
             string sqlDataSource = configuration.GetConnectionString("serverAPICon");
             SqlDataReader myReader;
             using (SqlConnection myCon = new SqlConnection(sqlDataSource)){
                 SqlCredential cred = CreateMyCredentials();
                 myCon.Credential = cred;
                 
-                myCon.Open();
+                await myCon.OpenAsync();
                 using (SqlCommand myCommand = new SqlCommand(query, myCon)){
-                    myReader = myCommand.ExecuteReader();
+                    myReader = await myCommand.ExecuteReaderAsync();
                     myReader.Close();
                 }
-                myCon.Close();
+                await myCon.CloseAsync();
             }
         }
         
-        public void CreateLesson(Lesson _lesson)
+        public async Task CreateLessonAsync(Lesson _lesson)
         { 
             string dateIni = _lesson.dateIni.asStringDB();
             string dateFin = _lesson.dateFin.asStringDB();
             string query   = @"insert into dbo.Lessons (name, prophesor, dateIni, dateFin, descr) values
                              ("+_lesson.name.ToString()+@", "+_lesson.prophesor.ToString()+@", '"+dateIni+@"', '"+dateFin+@"', '"+_lesson.description.ToString() + @"')";
-            processSQLQueryNotAnswer(query);
+            await processSQLQueryNotAnswer(query);
         }
 
-        public void DeleteLesson(int _id)
+        public async Task DeleteLessonAsync(int _id)
         {
             string query = @"delete from dbo.Lessons where id = "+_id.ToString();
-            processSQLQueryNotAnswer(query);
+            await processSQLQueryNotAnswer(query);
         }
 
-        public Lesson GetLesson(int _id)
+        public async Task<Lesson> GetLessonAsync(int _id)
         {
             string query = @"select id, name, prophesor, dateIni, dateFin, descr
                                    from dbo.Lessons where id =" + _id.ToString();
-            var table  = processSQLQuery(query);
-            var lessonRow = table.Select().SingleOrDefault();
+            var table  = await processSQLQuery(query);
+            var lessonRow =  table.Select().SingleOrDefault();
             
             if (lessonRow is null)
                 return null;
@@ -105,11 +106,12 @@ namespace serverAPI.Repositories{
             return lesson;
         }
 
-        public IEnumerable<Lesson> GetLessons()
+        public async Task<IEnumerable<Lesson>> GetLessonsAsync()
         {
             const string query = @"select id, name, prophesor, dateIni, dateFin, descr
                                    from dbo.Lessons";
-            var table = processSQLQuery(query);
+            var table = await processSQLQuery(query);
+            
             var lessons = table.Select().Select(row => 
                 new Lesson{
                     id = Convert.ToInt32(row["id"]),
@@ -124,7 +126,7 @@ namespace serverAPI.Repositories{
             return lessons;
         }
  
-        public void UpdateLesson(Lesson _lesson)
+        public async Task UpdateLessonAsync(Lesson _lesson)
         {
             string dateIni = _lesson.dateIni.asStringDB();
             string dateFin = _lesson.dateFin.asStringDB();
@@ -132,7 +134,7 @@ namespace serverAPI.Repositories{
                              prophesor = "+_lesson.prophesor.ToString() + @", descr = '"+_lesson.description.ToString() + @"', 
                              dateIni = '"+dateIni+@"', dateFin = '"+dateFin+@"' where 
                              id = "+_lesson.id.ToString();
-            processSQLQueryNotAnswer(query);
+            await processSQLQueryNotAnswer(query);
         }
     }
 }

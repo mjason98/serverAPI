@@ -1,11 +1,10 @@
 using System.Linq;
-using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using serverAPI.Repositories;
 using serverAPI.Dtos;
-//using System;
 using serverAPI.Entities;
-using Microsoft.Extensions.Configuration;
+using System.Threading.Tasks;
+using System.Collections.Generic;
 
 namespace serverAPI.Controllers {
     
@@ -19,14 +18,14 @@ namespace serverAPI.Controllers {
         }
 
         [HttpGet]
-        public IEnumerable<LessonDto> GetLessons(){
-            var lessons = repository.GetLessons().Select(lesson => lesson.asDto());
+        public async Task<IEnumerable<LessonDto>> GetLessonsAsync(){
+            var lessons = ( await repository.GetLessonsAsync()).Select(lesson => lesson.asDto());
             return lessons;
         }
 
         [HttpGet("{id}")]
-        public ActionResult<LessonDto> GetLesson(int id){
-            var lesson = repository.GetLesson(id);
+        public async Task<ActionResult<LessonDto>> GetLessonAsync(int id){
+            var lesson = await repository.GetLessonAsync(id);
 
             if (lesson is null)
                 return NotFound();
@@ -35,7 +34,7 @@ namespace serverAPI.Controllers {
         }
 
         [HttpPost]
-        public ActionResult<LessonDto> CreateLesson(CreateLessonDto lessonDto){
+        public async Task<ActionResult<LessonDto>> CreateLessonAsync(CreateLessonDto lessonDto){
             Lesson lesson = new (){
                 id = 10, //esto esta re mal
                 name = lessonDto.name,
@@ -45,14 +44,14 @@ namespace serverAPI.Controllers {
                 description = lessonDto.description,
             };
 
-            repository.CreateLesson(lesson);
+            await repository.CreateLessonAsync(lesson);
 
-            return CreatedAtAction(nameof(GetLesson), new {id = lesson.id}, lesson.asDto());
+            return CreatedAtAction(nameof(GetLessonAsync), new {id = lesson.id}, lesson.asDto());
         }
 
         [HttpPut("{id}")]
-        public ActionResult UpdateLesson(int id, UpdateLessonDto lessonDto){
-            var lesson = repository.GetLesson(id);
+        public async Task<ActionResult> UpdateLessonAsync(int id, UpdateLessonDto lessonDto){
+            var lesson = await repository.GetLessonAsync(id);
             if (lesson is null) 
                 return NotFound();
             var updatedLesson = lesson with {
@@ -63,18 +62,18 @@ namespace serverAPI.Controllers {
                 description = lessonDto.description
             };
 
-            repository.UpdateLesson(updatedLesson);
+            await repository.UpdateLessonAsync(updatedLesson);
             return NoContent();
         }
 
         [HttpDelete("{id}")]
-        public ActionResult DeleteLesson(int id){
-            var existingLesson = repository.GetLesson(id);
+        public async Task<ActionResult> DeleteLessonAsync(int id){
+            var existingLesson = await repository.GetLessonAsync(id);
             
             if (existingLesson is null)
                 return NotFound();
             
-            repository.DeleteLesson(id);
+            await repository.DeleteLessonAsync(id);
             return NoContent();
         }
     }  
