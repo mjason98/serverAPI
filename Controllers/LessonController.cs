@@ -43,7 +43,7 @@ namespace serverAPI.Controllers {
         }
 
         [HttpPost("lbd")] //lESSON bY dATE
-        public async Task<IEnumerable<LessonDto>> GetLessonsByDate(DayMonthYearDto myDto){
+        public async Task<IEnumerable<LessonEDto>> GetLessonsByDate(DayMonthYearDto myDto){
             var lessons = ( await repository.GetLessonsByDateAsync(myDto.day, myDto.month, myDto.year)).Select(lesson => lesson.asDto());
             return lessons;
         }

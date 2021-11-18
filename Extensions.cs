@@ -14,6 +14,16 @@ namespace serverAPI{
                 description = lesson.description
             };
         }
+        public static LessonEDto asDto(this LessonE lesson){
+            return new LessonEDto{
+                name = lesson.nameS,
+                id = lesson.id,
+                prophesor = lesson.prophesorS,
+                dateIni = lesson.dateIni,
+                dateFin = lesson.dateFin,
+                description = lesson.description,
+            };
+        }
         public static string asStringDB(this DateTimeOffset date){
             return date.Year.ToString()+'-' + date.Month.ToString()+'-'+date.Day.ToString()+' '+date.Hour+':'+date.Minute+':'+date.Second;
         }

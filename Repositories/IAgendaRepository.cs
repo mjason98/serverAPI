@@ -13,7 +13,7 @@ namespace serverAPI.Repositories {
         /* Tuple<day number, number of lessons that day> */
         Task<IEnumerable<System.Tuple<int,int>>> GetDailyLessonsAsync(int month, int year);
 
-        Task<IEnumerable<Lesson>> GetLessonsByDateAsync(int day, int month, int year);
+        Task<IEnumerable<LessonE>> GetLessonsByDateAsync(int day, int month, int year);
 
         Task<IEnumerable<Profesor>> GetProfesorsAsync();
         Task<Profesor> GetProfesorAsync(int _id);

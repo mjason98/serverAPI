@@ -152,20 +152,28 @@ namespace serverAPI.Repositories{
             return days;
         }
 
-        public async Task<IEnumerable<Lesson>> GetLessonsByDateAsync(int day, int month, int year)
+        public async Task<IEnumerable<LessonE>> GetLessonsByDateAsync(int day, int month, int year)
         {
-            string query = @"select id, name, prophesor, dateIni, dateFin, descr
-                                   from dbo.Lessons where day(dateIni) = "+day.ToString()+@" and year(dateIni) = "+year.ToString()+@" and month(dateIni) = "+month.ToString();
+            //string query = @"select id, name, prophesor, dateIni, dateFin, descr
+            //                       from dbo.Lessons where day(dateIni) = "+day.ToString()+@" and year(dateIni) = "+year.ToString()+@" and month(dateIni) = "+month.ToString();
+            
+            string query = @"select Lessons.id as id, Lessons.name as name, Lessons.prophesor as prophesor, Lessons.dateIni as dateIni, 
+                              Lessons.dateFin as dateFin, Lessons.descr as descr, Topics.name as nameS, Claustro.name as prophesorS
+                              from Lessons, Claustro, Topics 
+                              where day(dateIni) = "+day.ToString()+@" and year(dateIni) = "+year.ToString()+@" and month(dateIni) = "+month.ToString()+@" 
+                                    and Lessons.name = Topics.id and Claustro.id = Lessons.prophesor";
             var table = await processSQLQuery(query);
             
             var lessons = table.Select().Select(row => 
-                new Lesson{
+                new LessonE{
                     id = Convert.ToInt32(row["id"]),
                     name = Convert.ToInt32(row["name"]),
                     prophesor =  Convert.ToInt32(row["prophesor"]),
                     description = row["descr"].ToString(),
                     dateIni = DateTimeOffset.Parse(row["dateIni"].ToString()),
-                    dateFin = DateTimeOffset.Parse(row["dateFin"].ToString())
+                    dateFin = DateTimeOffset.Parse(row["dateFin"].ToString()),
+                    nameS = row["nameS"].ToString(),
+                    prophesorS = row["prophesorS"].ToString(),
                 }
             );
 

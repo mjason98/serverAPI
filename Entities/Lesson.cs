@@ -9,5 +9,8 @@ namespace serverAPI.Entities {
         public DateTimeOffset dateFin {get; init;}
         public string description {get; init;}
     }
-
+    public record LessonE : Lesson {
+        public string nameS {get; init;}
+        public string prophesorS{get; init;}
+    }
 }
