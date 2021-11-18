@@ -36,13 +36,13 @@ namespace serverAPI.Controllers {
             return lesson.asDto();
         }
 
-        [HttpGet("days-bmy")] //days bY mONTH AND yEAR
+        [HttpPost("days-bmy")] //days bY mONTH AND yEAR
         public async Task<IEnumerable<DaysDto>> GetDaysByMonthYearAsync(MonthYearDto myDto){
             var daysI = (await repository.GetDailyLessonsAsync(myDto.month, myDto.year)).Select(v => v.asDaysDto());
             return  daysI;
         }
 
-        [HttpGet("lbd")] //lESSON bY dATE
+        [HttpPost("lbd")] //lESSON bY dATE
         public async Task<IEnumerable<LessonDto>> GetLessonsByDate(DayMonthYearDto myDto){
             var lessons = ( await repository.GetLessonsByDateAsync(myDto.day, myDto.month, myDto.year)).Select(lesson => lesson.asDto());
             return lessons;
