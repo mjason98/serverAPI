@@ -58,9 +58,12 @@ namespace serverAPI.Controllers {
                 description = lessonDto.description,
             };
 
-            await repository.CreateLessonAsync(lesson);
+            int ide = await repository.CreateLessonAsync(lesson);
+            Lesson lessonWIde = lesson with {
+                id = ide,
+            };
 
-            return CreatedAtAction(nameof(GetLessonAsync), new {id = 0}, lesson.asDto());
+            return CreatedAtAction(nameof(GetLessonAsync), new {id = ide}, lessonWIde.asDto());
         }
 
         [HttpPut("{id}")]

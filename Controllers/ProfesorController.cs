@@ -40,9 +40,11 @@ namespace serverAPI.Controllers {
                 name = prof.name
             };
 
-            await repository.CreateProfesorAsync(v);
-
-            return CreatedAtAction(nameof(GetProfesorAsync), new {id = 0}, v.asDto());
+            int ide = await repository.CreateProfesorAsync(v);
+            Profesor vIde = v with {
+                id = ide
+            };
+            return CreatedAtAction(nameof(GetProfesorAsync), new {id = ide}, vIde.asDto());
         }
 
         [HttpPut("{id}")]

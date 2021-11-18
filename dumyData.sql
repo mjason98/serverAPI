@@ -7,7 +7,7 @@ go
 
 --Create the tables and filling it with dummy data
 CREATE TABLE dbo.Claustro(
-    id int IDENTITY(1,1),
+    id int IDENTITY(1,1) PRIMARY KEY,
     name VARCHAR(100)
 )
 
@@ -16,7 +16,7 @@ INSERT into Claustro VALUES
 go
 
 CREATE TABLE dbo.Topics(
-    id int IDENTITY(1,1),
+    id int IDENTITY(1,1) PRIMARY KEY,
     name VARCHAR (60)
 )
 
@@ -24,13 +24,24 @@ INSERT Into Topics VALUES
 ('Math'), ('Calculus'), ('Physics'), ('Graphic Programing')
 GO 
 
+
 CREATE TABLE dbo.Lessons(
-    id int IDENTITY(1,1),
+    id int IDENTITY(1,1) PRIMARY KEY,
     name int,
     prophesor int,
     dateIni datetime,
     dateFin datetime,
-    descr VARCHAR(256)
+    descr VARCHAR(256),
+
+    CONSTRAINT fk_name_id
+    FOREIGN KEY (name)
+    REFERENCES Topics (id)
+    ON DELETE CASCADE ,
+
+    CONSTRAINT fk_prophesor_id
+    FOREIGN KEY (prophesor)
+    REFERENCES Claustro (id)
+    ON DELETE CASCADE
 )
 
 INSERT INTO Lessons (name, prophesor, dateIni, dateFin, descr) VALUES

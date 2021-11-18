@@ -76,13 +76,20 @@ namespace serverAPI.Repositories{
         
         #region LessonMethods
 
-        public async Task CreateLessonAsync(Lesson _lesson)
+        public async Task<int> CreateLessonAsync(Lesson _lesson)
         { 
             string dateIni = _lesson.dateIni.asStringDB();
             string dateFin = _lesson.dateFin.asStringDB();
             string query   = @"insert into dbo.Lessons (name, prophesor, dateIni, dateFin, descr) values
-                             ("+_lesson.name.ToString()+@", "+_lesson.prophesor.ToString()+@", '"+dateIni+@"', '"+dateFin+@"', '"+_lesson.description.ToString() + @"')";
-            await processSQLQueryNotAnswer(query);
+                             ("+_lesson.name.ToString()+@", "+_lesson.prophesor.ToString()+@", '"+dateIni+@"', '"+dateFin+@"', '"+_lesson.description.ToString() + @"');
+                             SELECT SCOPE_IDENTITY() as n;";
+            
+            var table = await processSQLQuery(query);
+            var nRow = table.Select().SingleOrDefault();
+
+            if (nRow is null)
+                return 0;
+            return Convert.ToInt32(nRow["n"]);
         }
 
         public async Task DeleteLessonAsync(int _id)
@@ -214,10 +221,17 @@ namespace serverAPI.Repositories{
             return prof;
         }
 
-        public async Task CreateProfesorAsync(Profesor prof)
+        public async Task<int> CreateProfesorAsync(Profesor prof)
         {
-            string query   = @"insert into dbo.Claustro (name) values ('" + prof.name + @"')";
-            await processSQLQueryNotAnswer(query);
+            string query   = @"insert into dbo.Claustro (name) values ('" + prof.name + @"');;
+                             SELECT SCOPE_IDENTITY() as n;";
+            
+            var table = await processSQLQuery(query);
+            var nRow = table.Select().SingleOrDefault();
+
+            if (nRow is null)
+                return 0;
+            return Convert.ToInt32(nRow["n"]);
         }
 
         public async Task UpdateProfesorAsync(Profesor prof)
@@ -265,10 +279,17 @@ namespace serverAPI.Repositories{
             return topic;
         }
 
-        public async Task CreateTopicAsync(Topic topic)
+        public async Task<int> CreateTopicAsync(Topic topic)
         {
-            string query   = @"insert into dbo.Topics (name) values ('" + topic.name + @"')";
-            await processSQLQueryNotAnswer(query);
+            string query   = @"insert into dbo.Topics (name) values ('" + topic.name + @"');
+                             SELECT SCOPE_IDENTITY() as n;";
+            
+            var table = await processSQLQuery(query);
+            var nRow = table.Select().SingleOrDefault();
+
+            if (nRow is null)
+                return 0;
+            return Convert.ToInt32(nRow["n"]);
         }
 
         public async Task UpdateTopicAsync(Topic topic)

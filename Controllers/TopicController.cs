@@ -40,9 +40,11 @@ namespace serverAPI.Controllers {
                 name = topic.name
             };
 
-            await repository.CreateTopicAsync(v);
-
-            return CreatedAtAction(nameof(GetTopicAsync), new {id = 0}, v.asDto());
+            int ide = await repository.CreateTopicAsync(v);
+            Topic vIde = v with {
+                id = ide
+            };
+            return CreatedAtAction(nameof(GetTopicAsync), new {id = ide}, vIde.asDto());
         }
 
         [HttpPut("{id}")]
