@@ -161,14 +161,12 @@ namespace serverAPI.Repositories{
 
         public async Task<IEnumerable<LessonE>> GetLessonsByDateAsync(int day, int month, int year)
         {
-            //string query = @"select id, name, prophesor, dateIni, dateFin, descr
-            //                       from dbo.Lessons where day(dateIni) = "+day.ToString()+@" and year(dateIni) = "+year.ToString()+@" and month(dateIni) = "+month.ToString();
-            
             string query = @"select Lessons.id as id, Lessons.name as name, Lessons.prophesor as prophesor, Lessons.dateIni as dateIni, 
                               Lessons.dateFin as dateFin, Lessons.descr as descr, Topics.name as nameS, Claustro.name as prophesorS
                               from Lessons, Claustro, Topics 
                               where day(dateIni) = "+day.ToString()+@" and year(dateIni) = "+year.ToString()+@" and month(dateIni) = "+month.ToString()+@" 
-                                    and Lessons.name = Topics.id and Claustro.id = Lessons.prophesor";
+                                    and Lessons.name = Topics.id and Claustro.id = Lessons.prophesor
+                              order by Lessons.dateIni";
             var table = await processSQLQuery(query);
             
             var lessons = table.Select().Select(row => 
