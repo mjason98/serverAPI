@@ -24,9 +24,19 @@ namespace serverAPI.Repositories{
         public AgendaEF(AgendaDbContext context){
             _context = context;
         }
-        public Task<int> CreateLessonAsync(Lesson _lesson)
+        public async Task<int> CreateLessonAsync(Lesson _lesson)
         {
-            throw new NotImplementedException();
+            // var topic = await _context.Topics.Where(x => x.Id == _lesson.TopicId).SingleOrDefaultAsync();
+            // var profe = await _context.Claustro.Where(x => x.Id == _lesson.ProfesorId).SingleOrDefaultAsync();
+
+            // var lesson = _lesson with{
+            //     ProfesorId = profe.Id,
+            //     TopicId = topic.Id,
+            // };
+
+            await _context.AddAsync(_lesson);
+            await _context.SaveChangesAsync();
+            return _lesson.Id;
         }
 
         public async Task<int> CreateProfesorAsync(Profesor _lesson)
@@ -43,9 +53,13 @@ namespace serverAPI.Repositories{
             return _lesson.Id;
         }
 
-        public Task DeleteLessonAsync(int _id)
+        public async Task DeleteLessonAsync(int _id)
         {
-            throw new NotImplementedException();
+            var toDelete = await _context.Lessons.Where(x => x.Id == _id).SingleOrDefaultAsync();
+            if (toDelete is null)
+                return;
+            _context.Remove(toDelete);
+            await _context.SaveChangesAsync();
         }
 
         public async Task DeleteProfesorAsync(int _id)
@@ -71,19 +85,33 @@ namespace serverAPI.Repositories{
             throw new NotImplementedException();
         }
 
-        public Task<Lesson> GetLessonAsync(int _id)
+        public async Task<Lesson> GetLessonAsync(int _id)
         {
-            throw new NotImplementedException();
+            var lesson = await _context.Lessons.Where(x => x.Id == _id).SingleOrDefaultAsync();
+            return lesson;
         }
 
-        public Task<IEnumerable<Lesson>> GetLessonsAsync()
+        public async Task<IEnumerable<Lesson>> GetLessonsAsync()
         {
-            throw new NotImplementedException();
+            var lessons = await _context.Lessons.ToListAsync();
+            return lessons;
         }
 
-        public Task<IEnumerable<LessonE>> GetLessonsByDateAsync(int day, int month, int year)
+        public async Task<IEnumerable<LessonE>> GetLessonsByDateAsync(int day, int month, int year)
         {
-            throw new NotImplementedException();
+            var lessons = await _context.Lessons.Where(x => x.dateIni.Day == day && x.dateIni.Month == month && x.dateIni.Year == year)
+                                          .Include(x => x.Profesor).Include(x => x.Topic)
+                                          .Select(x => new LessonE{
+                                              Id = x.Id,
+                                              TopicId = x.TopicId,
+                                              ProfesorId =  x.ProfesorId,
+                                              description = x.description,
+                                              dateIni = x.dateIni,
+                                              dateFin = x.dateFin,
+                                              nameS = x.Topic.name,
+                                              prophesorS = x.Profesor.name,
+                                          }).ToListAsync();
+            return lessons;
         }
 
         public async Task<Profesor> GetProfesorAsync(int _id)
@@ -110,9 +138,10 @@ namespace serverAPI.Repositories{
             return topics;       
         }
 
-        public Task UpdateLessonAsync(Lesson _lesson)
+        public async Task UpdateLessonAsync(Lesson _lesson)
         {
-            throw new NotImplementedException();
+            _context.Update(_lesson);
+            await _context.SaveChangesAsync();
         }
 
         public async Task UpdateProfesorAsync(Profesor _lesson)

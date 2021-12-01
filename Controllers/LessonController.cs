@@ -71,15 +71,13 @@ namespace serverAPI.Controllers {
             var lesson = await repository.GetLessonAsync(id);
             if (lesson is null) 
                 return NotFound();
-            var updatedLesson = lesson with {
-                TopicId = lessonDto.name,
-                ProfesorId = lessonDto.prophesor,
-                dateIni = lessonDto.dateIni,
-                dateFin = lessonDto.dateFin,
-                description = lessonDto.description
-            };
+            lesson.TopicId = lessonDto.name;
+            lesson.ProfesorId = lessonDto.prophesor;
+            lesson.dateIni = lessonDto.dateIni;
+            lesson.dateFin = lessonDto.dateFin;
+            lesson.description = lessonDto.description;
 
-            await repository.UpdateLessonAsync(updatedLesson);
+            await repository.UpdateLessonAsync(lesson);
             return NoContent();
         }
 

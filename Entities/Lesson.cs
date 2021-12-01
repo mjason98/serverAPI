@@ -15,7 +15,7 @@ namespace serverAPI.Entities {
         public Profesor Profesor {get; set;}
     }
     public record LessonE : Lesson {
-        public string nameS {get; init;}
-        public string prophesorS{get; init;}
+        public string nameS {get; set;}
+        public string prophesorS{get; set;}
     }
 }
