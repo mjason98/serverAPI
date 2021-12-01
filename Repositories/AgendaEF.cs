@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using serverAPI.Entities;
+using System.Linq;
 
 namespace serverAPI.Repositories{
 
@@ -12,6 +13,7 @@ namespace serverAPI.Repositories{
         }
 
         public DbSet<Topic> Topics {get; set;}
+        
     }
 
 
@@ -31,11 +33,11 @@ namespace serverAPI.Repositories{
             throw new NotImplementedException();
         }
 
-        public Task<int> CreateTopicAsync(Topic _lesson)
+        public async Task<int> CreateTopicAsync(Topic _lesson)
         {
-            _context.Add(_lesson);
-            _context.SaveChanges();
-            return Task.FromResult(_lesson.id);
+            await _context.AddAsync(_lesson);
+            await _context.SaveChangesAsync();
+            return _lesson.id;
         }
 
         public Task DeleteLessonAsync(int _id)
@@ -48,9 +50,13 @@ namespace serverAPI.Repositories{
             throw new NotImplementedException();
         }
 
-        public Task DeleteTopicAsync(int _id)
+        public async Task DeleteTopicAsync(int _id)
         {
-            throw new NotImplementedException();
+            var toDelete = await _context.Topics.Where(x => x.id == _id).SingleOrDefaultAsync();
+            if (toDelete is null)
+                return;
+            _context.Remove(toDelete);
+            await _context.SaveChangesAsync();
         }
 
         public Task<IEnumerable<Tuple<int, int>>> GetDailyLessonsAsync(int month, int year)
@@ -83,16 +89,16 @@ namespace serverAPI.Repositories{
             throw new NotImplementedException();
         }
 
-        public Task<Topic> GetTopicAsync(int _id)
+        public async Task<Topic> GetTopicAsync(int _id)
         {
-            throw new NotImplementedException();
+            var topic = await _context.Topics.Where(x => x.id == _id).SingleOrDefaultAsync();
+            return topic;
         }
 
-        public Task<IEnumerable<Topic>> GetTopicsAsync()
+        public async Task<IEnumerable<Topic>> GetTopicsAsync()
         {
-            
-            // usar topics 
-            throw new NotImplementedException();
+            var topics = await _context.Topics.ToListAsync();
+            return topics;       
         }
 
         public Task UpdateLessonAsync(Lesson _lesson)
@@ -105,9 +111,10 @@ namespace serverAPI.Repositories{
             throw new NotImplementedException();
         }
 
-        public Task UpdateTopicAsync(Topic _lesson)
+        public async Task UpdateTopicAsync(Topic _lesson)
         {
-            throw new NotImplementedException();
+            _context.Update(_lesson);
+            await _context.SaveChangesAsync();
         }
     }
 }

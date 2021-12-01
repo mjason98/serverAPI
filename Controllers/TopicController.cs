@@ -52,11 +52,9 @@ namespace serverAPI.Controllers {
             var topic = await repository.GetTopicAsync(id);
             if (topic is null) 
                 return NotFound();
-            var updatedTopic = topic with {
-                name = topicDto.name
-            };
-
-            await repository.UpdateTopicAsync(updatedTopic);
+            topic.name = topicDto.name;
+            
+            await repository.UpdateTopicAsync(topic);
             return NoContent();
         }
 
