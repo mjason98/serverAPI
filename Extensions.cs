@@ -6,9 +6,9 @@ namespace serverAPI{
     public static class Extensions{
         public static LessonDto asDto(this Lesson lesson){
             return new LessonDto{
-                name = lesson.name,
-                id = lesson.id,
-                prophesor = lesson.prophesor,
+                name = lesson.TopicId,
+                id = lesson.Id,
+                prophesor = lesson.ProfesorId,
                 dateIni = lesson.dateIni,
                 dateFin = lesson.dateFin,
                 description = lesson.description
@@ -17,7 +17,7 @@ namespace serverAPI{
         public static LessonEDto asDto(this LessonE lesson){
             return new LessonEDto{
                 name = lesson.nameS,
-                id = lesson.id,
+                id = lesson.Id,
                 prophesor = lesson.prophesorS,
                 dateIni = lesson.dateIni,
                 dateFin = lesson.dateFin,
@@ -30,13 +30,13 @@ namespace serverAPI{
         public static ProfesorDto asDto (this Profesor prof){
             return new ProfesorDto{
                 name = prof.name,
-                id = prof.id
+                id = prof.Id
             };
         }
         public static TopicDto asDto (this Topic topic){
             return new TopicDto{
                 name = topic.name,
-                id = topic.id
+                id = topic.Id
             };
         }
 

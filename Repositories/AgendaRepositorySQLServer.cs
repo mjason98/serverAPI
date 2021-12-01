@@ -81,7 +81,7 @@ namespace serverAPI.Repositories{
             string dateIni = _lesson.dateIni.asStringDB();
             string dateFin = _lesson.dateFin.asStringDB();
             string query   = @"insert into dbo.Lessons (name, prophesor, dateIni, dateFin, descr) values
-                             ("+_lesson.name.ToString()+@", "+_lesson.prophesor.ToString()+@", '"+dateIni+@"', '"+dateFin+@"', '"+_lesson.description.ToString() + @"');
+                             ("+_lesson.TopicId.ToString()+@", "+_lesson.ProfesorId.ToString()+@", '"+dateIni+@"', '"+dateFin+@"', '"+_lesson.description.ToString() + @"');
                              SELECT SCOPE_IDENTITY() as n;";
             
             var table = await processSQLQuery(query);
@@ -109,9 +109,9 @@ namespace serverAPI.Repositories{
                 return null;
 
             Lesson lesson = new (){
-                id = Convert.ToInt32(lessonRow["id"]),
-                name = Convert.ToInt32(lessonRow["name"]),
-                prophesor =  Convert.ToInt32(lessonRow["prophesor"]),
+                Id = Convert.ToInt32(lessonRow["id"]),
+                TopicId = Convert.ToInt32(lessonRow["name"]),
+                ProfesorId =  Convert.ToInt32(lessonRow["prophesor"]),
                 description = lessonRow["descr"].ToString(),
                 dateIni = DateTimeOffset.Parse(lessonRow["dateIni"].ToString()),
                 dateFin = DateTimeOffset.Parse(lessonRow["dateFin"].ToString())
@@ -127,9 +127,9 @@ namespace serverAPI.Repositories{
             
             var lessons = table.Select().Select(row => 
                 new Lesson{
-                    id = Convert.ToInt32(row["id"]),
-                    name = Convert.ToInt32(row["name"]),
-                    prophesor =  Convert.ToInt32(row["prophesor"]),
+                    Id = Convert.ToInt32(row["id"]),
+                    TopicId = Convert.ToInt32(row["name"]),
+                    ProfesorId =  Convert.ToInt32(row["prophesor"]),
                     description = row["descr"].ToString(),
                     dateIni = DateTimeOffset.Parse(row["dateIni"].ToString()),
                     dateFin = DateTimeOffset.Parse(row["dateFin"].ToString())
@@ -143,10 +143,10 @@ namespace serverAPI.Repositories{
         {
             string dateIni = _lesson.dateIni.asStringDB();
             string dateFin = _lesson.dateFin.asStringDB();
-            string query = @"update dbo.Lessons set name = "+_lesson.name.ToString() + @", 
-                             prophesor = "+_lesson.prophesor.ToString() + @", descr = '"+_lesson.description.ToString() + @"', 
+            string query = @"update dbo.Lessons set name = "+_lesson.TopicId.ToString() + @", 
+                             prophesor = "+_lesson.ProfesorId.ToString() + @", descr = '"+_lesson.description.ToString() + @"', 
                              dateIni = '"+dateIni+@"', dateFin = '"+dateFin+@"' where 
-                             id = "+_lesson.id.ToString();
+                             id = "+_lesson.Id.ToString();
             await processSQLQueryNotAnswer(query);
         }
 
@@ -171,9 +171,9 @@ namespace serverAPI.Repositories{
             
             var lessons = table.Select().Select(row => 
                 new LessonE{
-                    id = Convert.ToInt32(row["id"]),
-                    name = Convert.ToInt32(row["name"]),
-                    prophesor =  Convert.ToInt32(row["prophesor"]),
+                    Id = Convert.ToInt32(row["id"]),
+                    TopicId = Convert.ToInt32(row["name"]),
+                    ProfesorId =  Convert.ToInt32(row["prophesor"]),
                     description = row["descr"].ToString(),
                     dateIni = DateTimeOffset.Parse(row["dateIni"].ToString()),
                     dateFin = DateTimeOffset.Parse(row["dateFin"].ToString()),
@@ -196,7 +196,7 @@ namespace serverAPI.Repositories{
             
             var profesors = table.Select().Select(row => 
                 new Profesor{
-                    id = Convert.ToInt32(row["id"]),
+                    Id = Convert.ToInt32(row["id"]),
                     name = row["name"].ToString()
                 }
             );
@@ -213,7 +213,7 @@ namespace serverAPI.Repositories{
                 return null;
 
             Profesor prof = new (){
-                id = Convert.ToInt32(vRow["id"]),
+                Id = Convert.ToInt32(vRow["id"]),
                 name = vRow["name"].ToString()
             };
             return prof;
@@ -234,7 +234,7 @@ namespace serverAPI.Repositories{
 
         public async Task UpdateProfesorAsync(Profesor prof)
         {
-            string query   = @"update dbo.Claustro set name='" + prof.name + @"' where id = " + prof.id.ToString();
+            string query   = @"update dbo.Claustro set name='" + prof.name + @"' where id = " + prof.Id.ToString();
             await processSQLQueryNotAnswer(query);
         }
 
@@ -254,7 +254,7 @@ namespace serverAPI.Repositories{
             
             var topics = table.Select().Select(row => 
                 new Topic{
-                    id = Convert.ToInt32(row["id"]),
+                    Id = Convert.ToInt32(row["id"]),
                     name = row["name"].ToString()
                 }
             );
@@ -271,7 +271,7 @@ namespace serverAPI.Repositories{
                 return null;
 
             Topic topic = new (){
-                id = Convert.ToInt32(vRow["id"]),
+                Id = Convert.ToInt32(vRow["id"]),
                 name = vRow["name"].ToString()
             };
             return topic;
@@ -292,7 +292,7 @@ namespace serverAPI.Repositories{
 
         public async Task UpdateTopicAsync(Topic topic)
         {
-            string query   = @"update dbo.Topics set name='" + topic.name + @"' where id = " + topic.id.ToString();
+            string query   = @"update dbo.Topics set name='" + topic.name + @"' where id = " + topic.Id.ToString();
             await processSQLQueryNotAnswer(query);
         }
 

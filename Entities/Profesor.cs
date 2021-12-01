@@ -1,6 +1,9 @@
+using System.ComponentModel.DataAnnotations;
+
 namespace serverAPI.Entities {
     public record Profesor {
-        public int id {get; init;}
-        public string name {get; init;}
+        public int Id {get; set;}
+        [StringLength(60)]
+        public string name {get; set;}
    }    
 }

@@ -1,5 +1,5 @@
 # only used by vscode
 /bin
 .vscode
-t.sql
+t.sql 
 migI.sql

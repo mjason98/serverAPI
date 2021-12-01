@@ -13,7 +13,8 @@ namespace serverAPI.Repositories{
         }
 
         public DbSet<Topic> Topics {get; set;}
-        
+        public DbSet<Profesor> Claustro {get; set;}
+        public DbSet<Lesson> Lessons {get; set;}
     }
 
 
@@ -28,16 +29,18 @@ namespace serverAPI.Repositories{
             throw new NotImplementedException();
         }
 
-        public Task<int> CreateProfesorAsync(Profesor _lesson)
+        public async Task<int> CreateProfesorAsync(Profesor _lesson)
         {
-            throw new NotImplementedException();
+            await _context.AddAsync(_lesson);
+            await _context.SaveChangesAsync();
+            return _lesson.Id;
         }
 
         public async Task<int> CreateTopicAsync(Topic _lesson)
         {
             await _context.AddAsync(_lesson);
             await _context.SaveChangesAsync();
-            return _lesson.id;
+            return _lesson.Id;
         }
 
         public Task DeleteLessonAsync(int _id)
@@ -45,14 +48,18 @@ namespace serverAPI.Repositories{
             throw new NotImplementedException();
         }
 
-        public Task DeleteProfesorAsync(int _id)
+        public async Task DeleteProfesorAsync(int _id)
         {
-            throw new NotImplementedException();
+            var toDelete = await _context.Claustro.Where(x => x.Id == _id).SingleOrDefaultAsync();
+            if (toDelete is null)
+                return;
+            _context.Remove(toDelete);
+            await _context.SaveChangesAsync();
         }
 
         public async Task DeleteTopicAsync(int _id)
         {
-            var toDelete = await _context.Topics.Where(x => x.id == _id).SingleOrDefaultAsync();
+            var toDelete = await _context.Topics.Where(x => x.Id == _id).SingleOrDefaultAsync();
             if (toDelete is null)
                 return;
             _context.Remove(toDelete);
@@ -79,19 +86,21 @@ namespace serverAPI.Repositories{
             throw new NotImplementedException();
         }
 
-        public Task<Profesor> GetProfesorAsync(int _id)
+        public async Task<Profesor> GetProfesorAsync(int _id)
         {
-            throw new NotImplementedException();
+            var prof = await _context.Claustro.Where(x => x.Id == _id).SingleOrDefaultAsync();
+            return prof;
         }
 
-        public Task<IEnumerable<Profesor>> GetProfesorsAsync()
+        public async Task<IEnumerable<Profesor>> GetProfesorsAsync()
         {
-            throw new NotImplementedException();
+            var profs = await _context.Claustro.ToListAsync();
+            return profs; 
         }
 
         public async Task<Topic> GetTopicAsync(int _id)
         {
-            var topic = await _context.Topics.Where(x => x.id == _id).SingleOrDefaultAsync();
+            var topic = await _context.Topics.Where(x => x.Id == _id).SingleOrDefaultAsync();
             return topic;
         }
 
@@ -106,9 +115,10 @@ namespace serverAPI.Repositories{
             throw new NotImplementedException();
         }
 
-        public Task UpdateProfesorAsync(Profesor _lesson)
+        public async Task UpdateProfesorAsync(Profesor _lesson)
         {
-            throw new NotImplementedException();
+            _context.Update(_lesson);
+            await _context.SaveChangesAsync();
         }
 
         public async Task UpdateTopicAsync(Topic _lesson)

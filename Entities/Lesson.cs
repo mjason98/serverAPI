@@ -1,13 +1,18 @@
 using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace serverAPI.Entities {
     public record Lesson {
-        public int id {get; init;}
-        public int name {get; init;}
-        public int prophesor{get; init;}
-        public DateTimeOffset dateIni {get; init;}
-        public DateTimeOffset dateFin {get; init;}
-        public string description {get; init;}
+        public int Id {get; set;}
+        public int TopicId {get; set;}
+        public int ProfesorId{get; set;}
+        public DateTimeOffset dateIni {get; set;}
+        public DateTimeOffset dateFin {get; set;}
+        [StringLength(256)]
+        public string description {get; set;}
+
+        public Topic Topic {get; set;}
+        public Profesor Profesor {get; set;}
     }
     public record LessonE : Lesson {
         public string nameS {get; init;}

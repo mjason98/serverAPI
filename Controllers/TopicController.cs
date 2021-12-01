@@ -6,8 +6,6 @@ using serverAPI.Entities;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 
-///// HAY ERROR EN EL CREATE CON EL ID
-
 namespace serverAPI.Controllers {
     [ApiController]
     [Route("api/[controller]")]
@@ -42,7 +40,7 @@ namespace serverAPI.Controllers {
 
             int ide = await repository.CreateTopicAsync(v);
             Topic vIde = v with {
-                id = ide
+                Id = ide
             };
             return CreatedAtAction(nameof(GetTopicAsync), new {id = ide}, vIde.asDto());
         }

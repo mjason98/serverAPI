@@ -51,8 +51,8 @@ namespace serverAPI.Controllers {
         [HttpPost]
         public async Task<ActionResult<LessonDto>> CreateLessonAsync(CreateLessonDto lessonDto){
             Lesson lesson = new (){
-                name = lessonDto.name,
-                prophesor = lessonDto.prophesor,
+                TopicId = lessonDto.name,
+                ProfesorId = lessonDto.prophesor,
                 dateIni = lessonDto.dateIni,
                 dateFin = lessonDto.dateFin,
                 description = lessonDto.description,
@@ -60,7 +60,7 @@ namespace serverAPI.Controllers {
 
             int ide = await repository.CreateLessonAsync(lesson);
             Lesson lessonWIde = lesson with {
-                id = ide,
+                Id = ide,
             };
 
             return CreatedAtAction(nameof(GetLessonAsync), new {id = ide}, lessonWIde.asDto());
@@ -72,8 +72,8 @@ namespace serverAPI.Controllers {
             if (lesson is null) 
                 return NotFound();
             var updatedLesson = lesson with {
-                name = lessonDto.name,
-                prophesor = lessonDto.prophesor,
+                TopicId = lessonDto.name,
+                ProfesorId = lessonDto.prophesor,
                 dateIni = lessonDto.dateIni,
                 dateFin = lessonDto.dateFin,
                 description = lessonDto.description

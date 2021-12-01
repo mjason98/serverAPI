@@ -6,7 +6,6 @@ using serverAPI.Entities;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 
-///// HAY ERROR EN EL CREATE CON EL ID
 
 namespace serverAPI.Controllers {
     [ApiController]
@@ -42,7 +41,7 @@ namespace serverAPI.Controllers {
 
             int ide = await repository.CreateProfesorAsync(v);
             Profesor vIde = v with {
-                id = ide
+                Id = ide
             };
             return CreatedAtAction(nameof(GetProfesorAsync), new {id = ide}, vIde.asDto());
         }
@@ -52,11 +51,8 @@ namespace serverAPI.Controllers {
             var prof = await repository.GetProfesorAsync(id);
             if (prof is null) 
                 return NotFound();
-            var updatedProf = prof with {
-                name = profDto.name
-            };
-
-            await repository.UpdateProfesorAsync(updatedProf);
+            prof.name = profDto.name;
+            await repository.UpdateProfesorAsync(prof);
             return NoContent();
         }
 
