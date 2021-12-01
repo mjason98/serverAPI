@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -38,12 +39,19 @@ namespace serverAPI
                 options.SerializerSettings.ReferenceLoopHandling=Newtonsoft.Json.ReferenceLoopHandling.Ignore)
                 .AddNewtonsoftJson(options => options.SerializerSettings.ContractResolver = new DefaultContractResolver());
             
-            services.AddSingleton<IAgendaRepository, AgendaRepositorySQLServer>();
+            //services.AddSingleton<IAgendaRepository, AgendaRepositorySQLServer>();
+            services.AddScoped<IAgendaRepository, AgendaEF>();
             
             // thisis for async error
             services.AddControllers(options => {
                 options.SuppressAsyncSuffixInActionNames = false;
             });
+
+            services.AddDbContext<AgendaDbContext>(options => options.UseSqlServer("name=ConnectionStrings:serverAPIConection")
+                                                                     .EnableSensitiveDataLogging(true)
+                                                                     .UseLoggerFactory(LoggerFactory.Create(build => build.AddFilter(
+                                                                         (category, level) => level == LogLevel.Information && category == DbLoggerCategory.Database.Command.Name).AddConsole())));
+
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "serverAPI", Version = "v1" });

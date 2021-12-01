@@ -1,12 +1,26 @@
-
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using serverAPI.Entities;
 
 namespace serverAPI.Repositories{
+
+    public class AgendaDbContext: DbContext {
+
+        public AgendaDbContext(DbContextOptions<AgendaDbContext> options) : base (options){
+        }
+
+        public DbSet<Topic> Topics {get; set;}
+    }
+
+
     public class AgendaEF : IAgendaRepository
     {
+        private readonly AgendaDbContext _context;
+        public AgendaEF(AgendaDbContext context){
+            _context = context;
+        }
         public Task<int> CreateLessonAsync(Lesson _lesson)
         {
             throw new NotImplementedException();
@@ -19,7 +33,9 @@ namespace serverAPI.Repositories{
 
         public Task<int> CreateTopicAsync(Topic _lesson)
         {
-            throw new NotImplementedException();
+            _context.Add(_lesson);
+            _context.SaveChanges();
+            return Task.FromResult(_lesson.id);
         }
 
         public Task DeleteLessonAsync(int _id)
@@ -74,6 +90,8 @@ namespace serverAPI.Repositories{
 
         public Task<IEnumerable<Topic>> GetTopicsAsync()
         {
+            
+            // usar topics 
             throw new NotImplementedException();
         }
 
