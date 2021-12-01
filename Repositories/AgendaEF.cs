@@ -80,9 +80,13 @@ namespace serverAPI.Repositories{
             await _context.SaveChangesAsync();
         }
 
-        public Task<IEnumerable<Tuple<int, int>>> GetDailyLessonsAsync(int month, int year)
+        public async Task<IEnumerable<Tuple<int, int>>> GetDailyLessonsAsync(int month, int year)
         {
-            throw new NotImplementedException();
+            var days = await _context.Lessons.Where(x => x.dateIni.Year == year && x.dateIni.Month == month)
+                                       .Select(x => new { day = x.dateIni.Day} ).GroupBy(x => x.day) 
+                                       .Select(x => new Tuple<int,int>(x.Key, x.Count()))
+                                       .ToListAsync();
+            return days;
         }
 
         public async Task<Lesson> GetLessonAsync(int _id)
