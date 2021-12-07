@@ -4,10 +4,11 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using serverAPI.Entities;
 using System.Linq;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace serverAPI.Repositories{
 
-    public class AgendaDbContext: DbContext {
+    public class AgendaDbContext: IdentityDbContext<ApplicationUser> {
 
         public AgendaDbContext(DbContextOptions<AgendaDbContext> options) : base (options){
         }

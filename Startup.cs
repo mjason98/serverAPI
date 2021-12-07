@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -13,6 +14,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using Newtonsoft.Json.Serialization;
+using serverAPI.Entities;
 using serverAPI.Repositories;
 
 namespace serverAPI
@@ -51,11 +53,9 @@ namespace serverAPI
                                                                      .EnableSensitiveDataLogging(true)
                                                                      .UseLoggerFactory(LoggerFactory.Create(build => build.AddFilter(
                                                                          (category, level) => level == LogLevel.Information && category == DbLoggerCategory.Database.Command.Name).AddConsole())));
-
-            services.AddSwaggerGen(c =>
-            {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "serverAPI", Version = "v1" });
-            });
+            services.AddIdentity<ApplicationUser, IdentityRole>()
+                    .AddEntityFrameworkStores<AgendaDbContext>()
+                    .AddDefaultTokenProviders();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -66,8 +66,6 @@ namespace serverAPI
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                app.UseSwagger();
-                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "serverAPI v1"));
             }
 
             app.UseHttpsRedirection();

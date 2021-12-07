@@ -1,5 +1,6 @@
 # only used by vscode
 /bin
+/obj 
 .vscode
 t.sql 
 migI.sql
