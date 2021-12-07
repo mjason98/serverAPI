@@ -5,10 +5,13 @@ using serverAPI.Dtos;
 using serverAPI.Entities;
 using System.Threading.Tasks;
 using System.Collections.Generic;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 namespace serverAPI.Controllers {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class TopicController : ControllerBase {
         private IAgendaRepository repository;
 
